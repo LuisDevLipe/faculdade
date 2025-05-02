@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Frases</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="refreshRandomQuotes($event)"
+    mode="ios"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  @if(quotes | async) {
+
+  <ion-list mode="md" inset="false" lines="none">
+    <ion-list-header>
+      <ion-label>Frases</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let quote of (quotes | async) ">
+      <ion-label>
+        <h2>{{ quote.quote}}</h2>
+        <p>-- {{ quote.author }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  } @else {
+  <ion-list>
+    <ion-list-header>
+      <ion-label>
+        <ion-skeleton-text
+          animated="true"
+          style="width: 40%"
+        ></ion-skeleton-text>
+      </ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let skel of [1,2,3,4,5]">
+      <ion-label>
+        <h2>
+          <ion-skeleton-text
+            animated="true"
+            style="width: 100%"
+          ></ion-skeleton-text>
+        </h2>
+        <p>
+          <ion-skeleton-text
+            animated="true"
+            style="width: 50%"
+          ></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  }
+</ion-content>
