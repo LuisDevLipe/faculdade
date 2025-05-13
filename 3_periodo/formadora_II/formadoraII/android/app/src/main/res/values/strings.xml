@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FormadoraII</string>
+    <string name="title_activity_main">FormadoraII</string>
+    <string name="package_name">com.example.formadoraII</string>
+    <string name="custom_url_scheme">com.example.formadoraII</string>
+</resources>
