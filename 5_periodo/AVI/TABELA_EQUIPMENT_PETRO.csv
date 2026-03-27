@@ -1,0 +1,6 @@
+equipment_id,equipment_name,location,maintenance_date
+1,Compressor A,Plant 1,2024-07-15
+2,Generator B,Plant 2,2024-08-20
+3,Pump C,Plant 1,2024-09-10
+4,Valve D,Plant 3,2024-10-05
+5,Conveyor E,Plant 2,2024-11-12
