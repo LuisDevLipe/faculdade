@@ -5,7 +5,10 @@ class: invert
 header: UNISUAM - Infraestrutura e Nuvem - ADS
 ---
 
-# Site estático na AWS com infraestrutura serverless
+![bg w:50%](./unisuam-seeklogo.png)
+
+---
+# Site estático na AWS com arquitetura serverless
 
 Autor: Luis Felipe Macedo dos Santos
 Turma: 5º Período - ADS0301N - Bonsucesso
@@ -15,14 +18,14 @@ Curso: Análise e Desenvolvimento de Sistemas
 
 # Introdução
 
-* Com os serviços de Nuvem, é possível criar e servir aplicações em escala global, com alta disponibilidade e desempenho otimizado.
+* Com os serviços de Nuvem da AWS, é possível criar e servir aplicações em escala global, com alta disponibilidade e desempenho otimizado.
 
 * Sem se preocupar com a infraestrutura subjacente, sem custos de manutenção de hardware e sem perder tempo providenciando e configurando todo o ambiente físico.
 
 ---
 
 # Nesse projeto
-Iremos hospedar um site estático na AWS que atende a escalas globais, faz utilização de criptografia para proteger a comunicação com o usuário e utiliza caching para diminuir a latência entre as requisições.
+Iremos hospedar um site estático na AWS que atende a escalas globais, faz utilização de criptografia para proteger a comunicação entre o servidor e o usuário e utiliza caching para diminuir a latência entre as requisições.
 
 ---
 
@@ -33,8 +36,6 @@ Iremos hospedar um site estático na AWS que atende a escalas globais, faz utili
     * Certificate Manager
     * CloudFront
     * S3 (Simple Storage Service)
----
-
 * Hostinger
     - compra do domínio tacabando.fun
 
@@ -61,6 +62,8 @@ Iremos hospedar um site estático na AWS que atende a escalas globais, faz utili
 * Bloqueio de acesso público ativado
 * Política de acesso para permitir que o CloudFront acesse os arquivos do Bucket
 
+Os arquivos do site ficarão guardados aqui.
+
 ---
 
 
@@ -77,35 +80,46 @@ Iremos hospedar um site estático na AWS que atende a escalas globais, faz utili
 
 > O certificado SSL/TLS gerado no Certificate Manager é integrado ao CloudFront.
 
+Efetivamente, esse é o nosso servidor
+
 ---
 
-# Domínio
+# Domínio (registrar)
 
 Domínio registrado na hostinger por R$7,09 Reais por ano (1º ano com desconto)
 
 ---
 
-# Arquitetura do projeto: Hands on
-
+# Desenvolvendo o projeto
+## Hands on
 ---
 
 ### Hostinger
 
-* O Domínio foi registrado na Hostinger 
+* O Domínio foi registrado na Hostinger
+> Configuramos os nameservers da Hostinger com os nameservers do Route 53 mais pra frente.
+
+> Os nameserver são informados no console da AWS após criarmos a zona hospedada no Route 53.
+
+---
+
+Qualquer domínio pode ser usado, desde que seja possível configurar os nameservers. Não importa o registrar.
 
 ---
 ### Route 53
 
-
-Criamos uma Zona Hospedada, e depois, trocamos os nameservers no registrar com os namerservers da AWS.
+* Criamos uma Zona Hospedada.
+* Copiamos registros ns
+* Colamos na configuração do registrar.
+--- 
 
 ![](./imgs/route53-zona-hospedada.png)
 
 ---
-### Hostinger
 
-Configurado para utilizar os nameservers da AWS.
-![bg contain](./imgs/hostiger-nameserver.png)
+***Adiantando a tarefa:*** Nameservers já configurados
+
+![contain](./imgs/hostiger-nameserver.png)
 
 ---
 
@@ -119,30 +133,33 @@ Geramos um certificado SSL/TLS na AWS.
 
 ---
 
-* O Amazon Certificate Manager gera um certificado SSL/TLS para o domínio
-    - permitindo que o acesso ao site seja criptografado e seguro
-    - O certificado é integrado ao CloudFront
+* O Amazon Certificate Manager gera um certificado SSL/TLS para o domínio que escolhemos
+* permitindo que o acesso ao site seja criptografado e seguro
+* O certificado fica integrado ao CloudFront
+* É renovado automaticamente
 ---
 ### Route 53
 
 > A validação do certificado SSL/TLS é feita por registros ***CNAME*** no **Route 53**
 
-Criamos registros **CNAME** dentro da Zona Hospedada para que o **ACM** verifique a propriedade do domínio
-
+Criamos os registros **CNAME** informados pelo **ACM** dentro da Zona Hospedada para que o **ACM** verifique que o domínio é de nossa propriedade e emita o certificado.
 
 ---
 
 ### S3 - *Simple Storage Service*
 
-O S3 será o nosso servidor de certo modo.
 
-Os arquivos estáticos do site estarão hospedados no S3.
+* Os arquivos estáticos do site estarão hospedados no S3.
 
-O CloudFront servirá os arquivos que colocarmos no Bucket.
+* O CloudFront servirá os arquivos que colocarmos no Bucket.
+
+---
 
 > Nota: Não precisamos ativar a opção de hospedagem estática no Bucket do S3.
 
-> Nota: Não precisar permitir o acesso público ao Bucket. O CloudFront fará a leitura dos arquivos através de políticas de segurança
+---
+
+> Nota: Não precisamos permitir o acesso público ao Bucket. O CloudFront fará a leitura dos arquivos através de políticas de segurança
 
 ---
 
@@ -153,7 +170,15 @@ Agora que temos:
 * Certificado SSL/TLS válido
 * Arquivos dos site estático em um Bucket no S3.
 
-Podemos criar uma distribuição no CloudFront.
+---
+# <!--fit--> Podemos criar uma **distribuição** no **CloudFront**.
+
+---
+## **Passos**
+
+* Informamos que a origem dos arquivos é o Bucket no S3
+* Informamos o nome do Bucket
+* Informamos o caminho raiz dos arquivos
 
 ---
 
@@ -163,35 +188,82 @@ Podemos criar uma distribuição no CloudFront.
 
 ---
 
-##### Distribuição CloudFront - Seleção do certificado SSL/TLS
+#### Seleção do certificado SSL/TLS
+
+Na próxima tela selecionamos o certificado gerado no AWS Certificate Manager
+
+---
 
 ![](./imgs/cloudfront-selecao-certificado.png)
 
 ---
 
+# <!--fit--> E por fim, teremos uma **distribuição** do **CloudFront**.
+---
 #### Resultado da configuração da distribuição
 
 ![](./imgs/cloudfront-configurado.png)
 
 ---
 
-Com a distruição do CloudFront configurada para servir os arquivos do Bucket no S3,
+# O que temos até agora?
 
-utilizando os certificado gerados no AWS Certificate Manager
+* Arquivos hospedados no S3
+* Certificado SSL/TLS gerado no Certificate Manager
+* Distribuição do CloudFront configurada para servir os arquivos do S3 utilizando o certificado SSL
+
+---
+
+# O que falta?
+
+* Configurar o Route 53 para encaminhar o tráfego do domínio para a distribuição do CloudFront.
 
 ---
 
 #### Registro DNS (Alias para a distribuição)
-Agora precisamos configurar registro do tipo A (IPV4) e AAAA (IPV6) do tipo **alias**,
+* Agora precisamos configurar registros do tipo A (IPV4) e do tipo AAAA (IPV6) como **alias**
 
-Para encaminhar o tráfego até a distribuição do CloudFront,
-
-que por sua vez, servirá os arquivos do Bucket no S3 com certificados SSL/TLS.
+--- 
 
 ![](./imgs/route53-registro-zona.png)
 
 ---
 
 # Resultado
+
+O Route 53 resolve o nome do domínio para a distribuição do CloudFront.
+
+
+---
+
+A distribuição do CloudFront protege a conexão com o certificado SSL/TLS
+
+---
+
+Busca o arquivos no Bucket do S3 e entrega para o usuário.
+
+---
+
+Se o arquivo foi acessado recentemente, o CloudFront entrega o arquivo em cache, diminuindo a latência e melhorando a experiência do usuário.
+
+---
+
+# Se você quer ver com seus próprios olhos, acesse o site: 
+# <!--fit--> [www.tacabando.fun](https://www.tacabando.fun)
+
+
+--- 
+
+# No Painel do CloudFront, tambem podemos ver:
+
+Métricas de telemetria e relatórios de acesso estatísticas de cache e rotas mais acessadas.
+
+---
+
+![bg contain](./imgs/cloudfront-metrics-monitor.png)
+
+---
+
+![bg contain](./imgs/cloudfront-metrics-cache.png)
 
 ---

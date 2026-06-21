@@ -1,0 +1,220 @@
+:root {
+    --bg-primary: #0b0f19;
+    --bg-secondary: #1e2640;
+    --text-primary: #f3f4f6;
+    --text-secondary: #94a3b8;
+    --accent: #3b82f6;
+    --success: #10b981;
+    --padding-outer: 8px;
+    --padding-inner: 8px;
+    --gap-outer: 8px;
+    --gap-inner: 8px;
+    --radius-outer: 8px;
+    --radius-inner: 4px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+
+    display: flex;
+    flex-flow: column nowrap;
+    padding: var(--padding-outer);
+    gap: var(--gap-outer);
+}
+
+nav {
+    background-color: var(--bg-secondary);
+    padding: var(--padding-inner);
+    display: flex;
+    gap: var(--gap-inner);
+    border-radius: var(--radius-outer);
+
+    justify-content: space-between;
+
+    ul {
+        display: flex;
+        gap: var(--gap-inner);
+        li {
+            a {
+                color: var(--text-primary);
+                display: flex;
+                align-items: center;
+                gap: var(--gap-inner);
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+
+                    color: var(--accent);
+                }
+            }
+        }
+    }
+}
+
+main {
+    display: grid;
+    grid-gap: var(--gap-outer);
+    grid-template-columns: 1.5fr 2fr;
+    min-height: 90vh;
+}
+
+main {
+    section {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: start;
+        background-color: var(--bg-secondary);
+        padding: var(--padding-inner);
+        border-radius: var(--radius-outer);
+        gap: var(--gap-inner);
+        h1 {
+            padding: 40px;
+            align-self: center;
+            width: 100%;
+            border-radius: var(--radius-inner);
+        }
+
+        ul {
+            display: flex;
+            flex-flow: column nowrap;
+            gap: var(--gap-inner);
+
+            background-color: var(--bg-primary);
+            width: 100%;
+            padding: var(--padding-inner);
+
+            border-radius: var(--radius-inner);
+
+            li {
+                padding: var(--padding-inner);
+                background-color: var(--bg-secondary);
+                border-radius: var(--radius-inner);
+                font-size: 1.25rem;
+            }
+            li:before {
+                /* check mark emoji */
+                content: "✅";
+                float: left;
+                margin-right: 8px;
+            }
+        }
+
+        > span {
+            border-radius: var(--radius-inner);
+            display: block;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            > span {
+                overflow: hidden;
+                display: block;
+                height: 100%;
+                width: 100%;
+                background-color: white;
+                background-image: url(../assets/cloudskew-diagram-frontend.png);
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        }
+    }
+}
+aside {
+    border-radius: var(--radius-outer);
+    overflow: hidden;
+    span {
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: var(--bg-secondary);
+        background-image: url(../assets/dog-dancing.gif);
+        background-size: 20%;
+    }
+}
+
+footer {
+    padding: 50px;
+}
+
+span#logo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 0 20px 0px var(--accent);
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+/* Define the custom property for smooth angle transitions */
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.rainbow {
+    position: relative;
+
+    /* Create spacing for the border */
+    border: 4px solid transparent;
+
+    /* Layer 1 (top): Matches card background. Layer 2 (bottom): The rainbow gradient */
+    background-image:
+        linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+        conic-gradient(from var(--angle), #ff4545, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee, #ff4545);
+
+    /* Clip backgrounds to their respective boxes so the border shows through */
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+
+    /* Trigger the infinite rotation animation */
+    animation: rotate-rainbow 4s linear infinite;
+}
+
+@keyframes rotate-rainbow {
+    to {
+        --angle: 360deg;
+    }
+}
+
+.major-mono-display-regular {
+  font-family: "Major Mono Display", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.anta-regular {
+  font-family: "Anta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
